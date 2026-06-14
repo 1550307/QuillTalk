@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuillTalk Account Deletion</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Updated font link to Raleway -->
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Updated font family to Raleway */
+        body { font-family: 'Raleway', sans-serif; }
+        
+        /* --- START: NEW HEADER STYLES --- */
+        .header-container {
+            /* User's requested styles for header */
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            background: linear-gradient(135deg, #2d58f5 0%, rgba(4, 12, 38, 0.84) 46%, rgba(45, 88, 245, 0.22) 100%);
+            padding: 25px 50px;
+            
+            /* Existing layout styles (kept for functionality) */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            
+            /* Removed unnecessary styles */
+            border-bottom: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Added subtle shadow for depth */
+        }
+        
+        /* Style for the logo image */
+        .header-container img {
+            /* REMOVED FILTER: Use this filter if you want a white logo against the blue background: */
+            /* filter: brightness(0) invert(1); */
+        }
+        
+        .nav-container a {
+            margin-left: 15px;
+            text-decoration: none;
+            color: white; /* Changed color for contrast against blue background */
+            font-weight: 600;
+            transition: color 0.15s;
+        }
+        .nav-container a:hover {
+            color: #d1d5db; /* Light gray hover state */
+        }
+        
+        /* Mobile adjustments */
+        @media (max-width: 600px) {
+            .header-container {
+                padding: 15px 20px; /* Smaller padding on mobile */
+                flex-direction: column;
+            }
+            .nav-container {
+                margin-top: 10px;
+            }
+        }
+        /* --- END: NEW HEADER STYLES --- */
+    </style>
+</head>
+<body class="bg-gray-50 flex flex-col items-center min-h-screen">
+
+    <!-- INSERTED HEADER BLOCK -->
+    <!-- Removed max-w-lg and mb-4 classes so the header can span the full width of the screen. -->
+    <header class="header-container w-full">
+        <a href="index.php">
+            <!-- Ensure you have an 'images/logo.png' file -->
+            <img src="images/logo.png" alt="Quill logo." style="height: 50px; cursor: pointer;">
+        </a>
+        <div class="nav-container">
+            <nav>
+                <a href="signup.php">Sign Up</a>
+                <a href="login.php">Login</a>
+            </nav>
+        </div>
+    </header>
+    <!-- END INSERTED HEADER BLOCK -->
+
+
+    <!-- Main content container is now outside the header -->
+    <div class="p-4 w-full flex flex-col items-center">
+        <div class="bg-white p-8 md:p-10 rounded-xl shadow-2xl max-w-lg w-full">
+            <!-- Header -->
+            <h1 class="text-3xl font-bold text-red-600 mb-4 text-center">
+                Account Deletion Information
+            </h1>
+            <p class="text-center text-gray-500 mb-8">
+                This page provides details on how to permanently delete your QuillTalk account.
+            </p>
+
+            <!-- Deletion Method -->
+            <div class="mb-6">
+                <h2 class="text-xl font-semibold text-gray-800 mb-3 border-b pb-2">
+                    How to Delete Your Account
+                </h2>
+                <ol class="list-decimal list-inside space-y-3 pl-2 text-gray-700">
+                    <li>Log in to the **QuillTalk app** or website.</li>
+                    <li>Go to the **Settings** or **Profile** section.</li>
+                    <li>Tap or click the **"Delete My Account"** button (it is usually red).</li>
+                    <li>Confirm the irreversible action when prompted.</li>
+                </ol>
+            </div>
+
+            <!-- Data Deleted -->
+            <div class="mb-8 p-4 bg-red-50 rounded-lg border border-red-200">
+                <h2 class="text-xl font-semibold text-red-700 mb-2">
+                    What Data is Deleted?
+                </h2>
+                <p class="text-gray-700">
+                    When you delete your account, **all associated data** is permanently erased from our system:
+                </p>
+                <ul class="list-disc list-inside space-y-1 mt-2 text-sm text-gray-600">
+                    <li>Your User Profile (username, email, password hash).</li>
+                    <li>All Sent and Received Messages.</li>
+                    <li>All Friend Relationship records.</li>
+                    <li>All Active Session Tokens (you will be logged out everywhere).</li>
+                </ul>
+            </div>
+            
+            <!-- NEW SECTION: Email Request Link -->
+            <div class="mb-6 p-4 bg-gray-100 rounded-lg border border-gray-300">
+                <h2 class="text-xl font-semibold text-gray-800 mb-3 border-b pb-2">
+                    Request Deletion via Email (Alternative)
+                </h2>
+                <p class="text-gray-700 mb-4">
+                    If you cannot access the app, you may request deletion by email. Please include your **QuillTalk Username** and **Email Address** linked to the account.
+                </p>
+                <a href="mailto:support@quilltalk.org?subject=Request%20for%20Account%20and%20Data%20Deletion"
+                   class="inline-block w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-150 ease-in-out">
+                    Request Account Deletion Now
+                </a>
+            </div>
+            
+            <!-- Support Contact -->
+            <p class="text-center text-sm text-gray-500">
+                If you need assistance with account deletion, please contact our support team.
+            </p>
+        </div>
+    </div>
+
+</body>
+</html>

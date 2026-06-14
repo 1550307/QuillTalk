@@ -1,0 +1,9 @@
+{
+    "require": {
+        "minishlink/web-push": "^8.0",
+        "google/apiclient": "^2.18",
+        "phpmailer/phpmailer": "^7.0",
+        "web-auth/webauthn-lib": "^3.3",
+        "mailjet/mailjet-apiv3-php": "^1.6"
+    }
+}

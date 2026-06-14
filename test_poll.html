@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Poll Feature Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: 0 auto; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { background: #d4edda; border-color: #c3e6cb; }
+        .error { background: #f8d7da; border-color: #f5c6cb; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+        pre { background: #f5f5f5; padding: 10px; overflow-x: auto; }
+        input, select { padding: 8px; margin: 5px 0; width: 100%; max-width: 400px; }
+    </style>
+</head>
+<body>
+    <h1>Poll Feature Test Page</h1>
+    
+    <div class="test-section error">
+        <h2>⚠️ Important: Authentication Required</h2>
+        <p>To create polls, you must be logged in to the app. This test page is for checking if the backend files work.</p>
+        <p><strong>To test polls properly:</strong></p>
+        <ol>
+            <li>Log in to your app (app.php)</li>
+            <li>Open a chat with a friend or group</li>
+            <li>Click the + button next to the image/voice buttons</li>
+            <li>Select "Start a poll"</li>
+        </ol>
+        <p>Use the tests below to verify the database structure only.</p>
+    </div>
+    
+    <div class="test-section">
+        <h2>1. Check Database Tables</h2>
+        <button onclick="checkTables()">Check Tables</button>
+        <div id="tablesResult"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>2. Create Test Poll</h2>
+        <label>Chat With (user ID or group:ID):</label>
+        <input type="text" id="chatWith" placeholder="e.g., 2 or group:5" value="2">
+        
+        <label>Poll Title:</label>
+        <input type="text" id="pollTitle" placeholder="What's your favorite color?" value="Test Poll">
+        
+        <label>Option 1:</label>
+        <input type="text" id="option1" placeholder="Red" value="Option A">
+        
+        <label>Option 2:</label>
+        <input type="text" id="option2" placeholder="Blue" value="Option B">
+        
+        <label>End Responses (optional):</label>
+        <input type="number" id="endResponses" placeholder="5" value="">
+        
+        <button onclick="createTestPoll()">Create Poll</button>
+        <div id="createResult"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>3. Get Poll Data</h2>
+        <label>Poll ID:</label>
+        <input type="number" id="pollId" placeholder="1">
+        <button onclick="getPollData()">Get Poll Data</button>
+        <div id="pollDataResult"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>4. Vote on Poll</h2>
+        <label>Poll ID:</label>
+        <input type="number" id="votePollId" placeholder="1">
+        <label>Option ID:</label>
+        <input type="number" id="voteOptionId" placeholder="1">
+        <button onclick="voteOnPoll()">Vote</button>
+        <div id="voteResult"></div>
+    </div>
+
+    <script>
+        async function checkTables() {
+            const result = document.getElementById('tablesResult');
+            result.innerHTML = '<p>Checking...</p>';
+            
+            try {
+                const res = await fetch('check_poll_tables.php');
+                const data = await res.json();
+                
+                if (data.success) {
+                    result.innerHTML = `
+                        <div class="success">
+                            <h3>✅ Tables Found:</h3>
+                            <ul>
+                                <li>polls: ${data.tables.polls ? '✅' : '❌'}</li>
+                                <li>poll_options: ${data.tables.poll_options ? '✅' : '❌'}</li>
+                                <li>poll_votes: ${data.tables.poll_votes ? '✅' : '❌'}</li>
+                            </ul>
+                        </div>
+                    `;
+                } else {
+                    result.innerHTML = `<div class="error">❌ Error: ${data.error}</div>`;
+                }
+            } catch (e) {
+                result.innerHTML = `<div class="error">❌ Error: ${e.message}</div>`;
+            }
+        }
+        
+        async function createTestPoll() {
+            const result = document.getElementById('createResult');
+            result.innerHTML = '<p>Creating poll...</p>';
+            
+            const chatWith = document.getElementById('chatWith').value;
+            const title = document.getElementById('pollTitle').value;
+            const option1 = document.getElementById('option1').value;
+            const option2 = document.getElementById('option2').value;
+            const endResponses = document.getElementById('endResponses').value;
+            
+            if (!chatWith || !title || !option1 || !option2) {
+                result.innerHTML = '<div class="error">❌ Please fill in all required fields</div>';
+                return;
+            }
+            
+            try {
+                const res = await fetch('create_poll.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_with: chatWith,
+                        title: title,
+                        options: [
+                            { text: option1, image: null },
+                            { text: option2, image: null }
+                        ],
+                        end_date: null,
+                        end_responses: endResponses ? parseInt(endResponses) : null
+                    })
+                });
+                
+                const data = await res.json();
+                
+                console.log('Response status:', res.status);
+                console.log('Response data:', data);
+                
+                if (data.success) {
+                    result.innerHTML = `
+                        <div class="success">
+                            <h3>✅ Poll Created!</h3>
+                            <p>Poll ID: ${data.poll_id}</p>
+                            <p>Message ID: ${data.message_id}</p>
+                        </div>
+                    `;
+                } else {
+                    result.innerHTML = `
+                        <div class="error">
+                            <h3>❌ Error: ${data.error || 'Unknown error'}</h3>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `;
+                }
+            } catch (e) {
+                result.innerHTML = `<div class="error">❌ Error: ${e.message}</div>`;
+            }
+        }
+        
+        async function getPollData() {
+            const result = document.getElementById('pollDataResult');
+            const pollId = document.getElementById('pollId').value;
+            
+            if (!pollId) {
+                result.innerHTML = '<div class="error">❌ Please enter a poll ID</div>';
+                return;
+            }
+            
+            result.innerHTML = '<p>Loading...</p>';
+            
+            try {
+                const res = await fetch(`get_poll_data.php?poll_id=${pollId}`);
+                const data = await res.json();
+                
+                if (data.success) {
+                    result.innerHTML = `
+                        <div class="success">
+                            <h3>✅ Poll Data:</h3>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `;
+                } else {
+                    result.innerHTML = `<div class="error">❌ Error: ${data.error}</div>`;
+                }
+            } catch (e) {
+                result.innerHTML = `<div class="error">❌ Error: ${e.message}</div>`;
+            }
+        }
+        
+        async function voteOnPoll() {
+            const result = document.getElementById('voteResult');
+            const pollId = document.getElementById('votePollId').value;
+            const optionId = document.getElementById('voteOptionId').value;
+            
+            if (!pollId || !optionId) {
+                result.innerHTML = '<div class="error">❌ Please enter poll ID and option ID</div>';
+                return;
+            }
+            
+            result.innerHTML = '<p>Voting...</p>';
+            
+            try {
+                const res = await fetch('vote_poll.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        poll_id: parseInt(pollId),
+                        option_id: parseInt(optionId)
+                    })
+                });
+                
+                const data = await res.json();
+                
+                if (data.success) {
+                    result.innerHTML = '<div class="success">✅ Vote recorded!</div>';
+                } else {
+                    result.innerHTML = `<div class="error">❌ Error: ${data.error}</div>`;
+                }
+            } catch (e) {
+                result.innerHTML = `<div class="error">❌ Error: ${e.message}</div>`;
+            }
+        }
+    </script>
+</body>
+</html>

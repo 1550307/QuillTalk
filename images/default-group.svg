@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title desc">
+  <title id="title">Default group chat icon</title>
+  <desc id="desc">Abstract group chat avatar with three people shapes.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#dbeafe" />
+      <stop offset="100%" stop-color="#bfdbfe" />
+    </linearGradient>
+  </defs>
+  <rect width="160" height="160" rx="36" fill="url(#bg)" />
+  <circle cx="80" cy="55" r="20" fill="#2d58f5" opacity="0.95" />
+  <circle cx="46" cy="71" r="16" fill="#60a5fa" opacity="0.95" />
+  <circle cx="114" cy="71" r="16" fill="#60a5fa" opacity="0.95" />
+  <path d="M40 122c0-17 14-31 31-31h18c17 0 31 14 31 31v10H40z" fill="#2d58f5" opacity="0.92" />
+  <path d="M18 124c0-13 11-24 24-24h10c13 0 24 11 24 24v8H18z" fill="#93c5fd" opacity="0.92" />
+  <path d="M84 124c0-13 11-24 24-24h10c13 0 24 11 24 24v8H84z" fill="#93c5fd" opacity="0.92" />
+</svg>
